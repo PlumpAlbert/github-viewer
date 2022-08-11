@@ -1,6 +1,6 @@
 import axios from "axios";
 import {z} from "zod";
-import {ErrorType, GITHUB_API_ENDPOINT} from "..";
+import {ErrorType, GITHUB_API_ENDPOINT} from "api";
 
 export const getOrganizationRepos = async ({
   name,
@@ -60,4 +60,4 @@ const ResponseSchema = z
   })
   .array();
 
-type ResponseType = z.infer<typeof ResponseSchema> & ErrorType;
+type ResponseType = z.infer<typeof ResponseSchema> | ErrorType;
