@@ -38,13 +38,13 @@ export const reposFetchError = (error: ErrorType) =>
  *  filters used for fetching repos
  */
 export default function* getRepos(
-  params: Parameters<typeof getOrganizationRepos>[0]
+  ...params: Parameters<typeof getOrganizationRepos>
 ) {
   try {
     yield call(reposFetchStart);
     const repos: Awaited<ReturnType<typeof getOrganizationRepos>> = yield call(
       getOrganizationRepos,
-      params
+      ...params
     );
     yield call(reposFetchSuccess, repos);
   } catch (error: any) {
