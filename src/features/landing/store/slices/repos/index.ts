@@ -1,17 +1,21 @@
 import {Reducer} from "redux";
+import {Action, ActionType, ACTION_TYPE} from "../../actions";
 import {z} from "zod";
-import {Action} from "../../actions";
-import {IFetchable} from "../../actions/fetch";
+import {IFetchable} from "../fetch";
 
 export const STORE_NAME = "repos";
 
 export const initialState: RepoState = {
-  isFetching: false,
+  name: '',
+  repos: {
+    isFetching: false
+  }
 };
 
-type RepoState = IFetchable<{
-  [key: string]: RepoType;
-}>;
+export type RepoState = {
+  name: string,
+  repos: IFetchable<RepoType[]>
+};
 
 const reducer: Reducer<RepoState, Action> = (state = initialState, action) => {
   return state;
