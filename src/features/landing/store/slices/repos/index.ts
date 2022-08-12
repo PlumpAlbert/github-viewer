@@ -6,18 +6,32 @@ import {IFetchable} from "../fetch";
 export const STORE_NAME = "repos";
 
 export const initialState: RepoState = {
-  name: '',
+  name: "",
   repos: {
-    isFetching: false
-  }
+    isFetching: false,
+  },
 };
 
 export type RepoState = {
-  name: string,
-  repos: IFetchable<RepoType[]>
+  name: string;
+  repos: IFetchable<RepoType[]>;
 };
 
-const reducer: Reducer<RepoState, Action> = (state = initialState, action) => {
+const reducer: Reducer<RepoState, Action<any, RepoState>> = (
+  state = initialState,
+  action
+) => {
+  const {storeName, type, property} = action.type;
+  if (storeName !== STORE_NAME) return state;
+  switch (type) {
+    case ACTION_TYPE.CHANGE: {
+      switch (property) {
+        case "name": {
+          return {...state, name: action.payload};
+        }
+      }
+    }
+  }
   return state;
 };
 
