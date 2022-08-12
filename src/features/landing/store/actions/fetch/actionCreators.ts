@@ -1,5 +1,5 @@
 import {ACTION_TYPE, Action, GroupedAction} from "..";
-import {changeIsFetching, changeValue, setFetchError} from "./actions";
+import {changeIsFetching, updateValue, setFetchError} from "./actions";
 
 /** Action creator for handling fetch requests */
 export const fetchRequest = ({
@@ -7,10 +7,10 @@ export const fetchRequest = ({
   property,
   clearState,
 }: IFetchParams): GroupedAction => {
-  const path = {store, property};
+  const path = joinPath(store, property || "");
   const actions: Action[] = [changeIsFetching(path, false)];
   if (clearState) {
-    actions.push(changeValue(path, {clear: true}));
+    actions.push(updateValue(path, {clear: true}));
   }
   return {
     type: ACTION_TYPE.GROUPED,
@@ -23,10 +23,10 @@ export const fetchError = <T = any>(
   {store, property, clearState}: IFetchParams,
   error: T
 ): GroupedAction => {
-  const path = {store, property};
+  const path = joinPath(store, property || "");
   const actions: Action[] = [changeIsFetching(path, false)];
   if (clearState) {
-    actions.push(changeValue(path, {clear: true}));
+    actions.push(updateValue(path, {clear: true}));
   }
   actions.push(setFetchError(path, error));
   return {
@@ -40,10 +40,10 @@ export const fetchSuccess = <T = any>(
   {store, property, clearState}: IFetchParams,
   value: T
 ): GroupedAction => {
-  const path = {store, property};
+  const path = joinPath(store, property || "");
   const actions = [
     changeIsFetching(path, false),
-    changeValue(path, {clear: !!clearState, value}),
+    updateValue(path, {clear: !!clearState, value}),
   ];
   return {
     type: ACTION_TYPE.GROUPED,
@@ -58,4 +58,13 @@ interface IFetchParams {
   property?: string;
   /** If `true` - clear current state */
   clearState?: boolean;
+}
+
+/**
+ * Helper function for combining list of properties into property path
+ *
+ * @param properties - path to property with type `IFetchable`
+ */
+function joinPath(...properties: string[]): string {
+  return properties.join(".");
 }

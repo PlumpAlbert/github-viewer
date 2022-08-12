@@ -4,40 +4,27 @@ import {IFetchable} from ".";
 //#region Actions
 
 /** Action creator for changing current state of `IFetchable` */
-export const changeIsFetching = (
-  {store, property}: IPathParam,
-  value: boolean
-) => ({
-  type: actionTypeCreator(
+export const changeIsFetching = (store: string, value: boolean) => ({
+  type: actionTypeCreator<IFetchable<any>>(
     store,
     ACTION_TYPE.CHANGE,
-    templateProperty`${property}.${"isFetching"}`
+    "isFetching"
   ),
   payload: value,
 });
 
-/** Action creator for changing current state of `IFetchable` */
-export const changeValue = <V = any>(
-  {store, property}: IPathParam,
-  value: IClearable<V>
-) => ({
-  type: actionTypeCreator(
-    store,
-    ACTION_TYPE.CHANGE,
-    templateProperty`${property}.${"isFetching"}`
-  ),
+/** Action creator for updating current state of `IFetchable` */
+export const updateValue = <V = any>(store: string, value: IClearable<V>) => ({
+  type: actionTypeCreator<IFetchable<V>>(store, ACTION_TYPE.CHANGE, "value"),
   payload: value,
 });
 
 /** Action creator for setting current error state of `IFetchable` */
-export const setFetchError = <V = any>(
-  {store, property}: IPathParam,
-  value: V
-) => ({
-  type: actionTypeCreator(
+export const setFetchError = <V = any>(store: string, value: V) => ({
+  type: actionTypeCreator<IFetchable<any, V>>(
     store,
     ACTION_TYPE.CHANGE,
-    templateProperty`${property}.${"fetchError"}`
+    "fetchError"
   ),
   payload: value,
 });
@@ -46,14 +33,7 @@ export const setFetchError = <V = any>(
 
 //#region Type definitions
 
-interface IPathParam {
-  /** name of store to update */
-  store: string;
-  /** path to `IFetchable` property. If empty - perform action on root */
-  property?: string;
-}
-
-interface IClearable<T = any> {
+export interface IClearable<T = any> {
   /** If `true` - replace existing value with new one.
    * Otherwise merge values together */
   clear: boolean;
@@ -62,21 +42,3 @@ interface IClearable<T = any> {
 }
 
 //#endregion
-
-/**
- * Template function that simplifies property path creation for `IFetchable`
- * objects
- *
- * @param property - path to property with type `IFetchable`
- * @param fetchableProperty - property of `IFetchable` type
- */
-function templateProperty(
-  _: TemplateStringsArray,
-  property: string | undefined,
-  fetchableProperty: keyof IFetchable<any>
-): string {
-  if (property) {
-    return `${property}.${fetchableProperty}`;
-  }
-  return fetchableProperty;
-}
