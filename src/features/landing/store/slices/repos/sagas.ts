@@ -37,7 +37,9 @@ export const reposFetchError = (error: ErrorType) =>
  *  @param params
  *  filters used for fetching repos
  */
-function* getRepos(params: Parameters<typeof getOrganizationRepos>[0]) {
+export default function* getRepos(
+  params: Parameters<typeof getOrganizationRepos>[0]
+) {
   try {
     yield call(reposFetchStart);
     const repos: Awaited<ReturnType<typeof getOrganizationRepos>> = yield call(
