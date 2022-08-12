@@ -5,7 +5,7 @@ import * as fetchActionCreators from "../fetch/actionCreators";
 
 /** Action creator for handling fetch request of repos */
 export const fetchRepos = () =>
-  fetchActionCreators.fetchRequest<RepoState>({
+  fetchActionCreators.fetchRequestSaga<RepoState>({
     store: STORE_NAME,
     property: "repos",
   });
@@ -15,7 +15,7 @@ export const fetchRepos = () =>
  * @param repos - list of repos to append to store
  */
 export const fetchReposSuccess = (repos: RepoType[]) =>
-  fetchActionCreators.fetchSuccess<RepoType[], RepoState>(
+  fetchActionCreators.fetchSuccessSaga<RepoType[], RepoState>(
     {store: STORE_NAME, property: "repos"},
     repos
   );
@@ -25,7 +25,7 @@ export const fetchReposSuccess = (repos: RepoType[]) =>
  * @param error - error object to set
  */
 export const fetchReposError = (error: ErrorType) =>
-  fetchActionCreators.fetchError<ErrorType, RepoState>(
+  fetchActionCreators.fetchErrorSaga<ErrorType, RepoState>(
     {store: STORE_NAME, property: "repos"},
     error
   );

@@ -1,55 +1,41 @@
-import {ACTION_TYPE, Action, GroupedAction} from "../../actions";
+import {put} from "redux-saga/effects";
 import {changeIsFetching, updateValue, setFetchError} from "./actions";
 
 /** Action creator for handling fetch requests */
-export const fetchRequest = <R = any>({
+export function* fetchRequestSaga<R = any>({
   store,
   property,
   clearState,
-}: IFetchParams<R>): GroupedAction => {
+}: IFetchParams<R>) {
   const path = joinPath(store, property?.toString() || "");
-  const actions: Action[] = [changeIsFetching(path, false)];
+  yield put(changeIsFetching(path, false));
   if (clearState) {
-    actions.push(updateValue(path, {clear: true}));
+    yield put(updateValue(path, {clear: true}));
   }
-  return {
-    type: ACTION_TYPE.GROUPED,
-    payload: actions,
-  };
-};
+}
 
 /** Action creator for handling fetch errors */
-export const fetchError = <T = any, R = any>(
+export function* fetchErrorSaga<T = any, R = any>(
   {store, property, clearState}: IFetchParams<R>,
   error: T
-): GroupedAction => {
+) {
   const path = joinPath(store, property?.toString() || "");
-  const actions: Action[] = [changeIsFetching(path, false)];
+  yield put(changeIsFetching(path, false));
   if (clearState) {
-    actions.push(updateValue(path, {clear: true}));
+    yield put(updateValue(path, {clear: true}));
   }
-  actions.push(setFetchError(path, error));
-  return {
-    type: ACTION_TYPE.GROUPED,
-    payload: actions,
-  };
-};
+  yield put(setFetchError(path, error));
+}
 
 /** Action creator for handling fetch response */
-export const fetchSuccess = <T = any, R = any>(
+export function* fetchSuccessSaga<T = any, R = any>(
   {store, property, clearState}: IFetchParams<R>,
   value: T
-): GroupedAction => {
+) {
   const path = joinPath(store, property?.toString() || "");
-  const actions = [
-    changeIsFetching(path, false),
-    updateValue(path, {clear: !!clearState, value}),
-  ];
-  return {
-    type: ACTION_TYPE.GROUPED,
-    payload: actions,
-  };
-};
+  yield put(changeIsFetching(path, false));
+  yield put(updateValue(path, {clear: !!clearState, value}));
+}
 
 interface IFetchParams<StoreType = any> {
   /** Name of store to update */
