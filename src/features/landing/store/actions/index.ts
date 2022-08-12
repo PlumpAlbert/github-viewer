@@ -30,7 +30,7 @@ export enum ACTION_TYPE {
  * Type of action's `type` property
  * @template RootType - type of root state
  */
-type ActionType<RootType> = {
+export type ActionType<RootType> = {
   /** Name of slice in `RootState` */
   storeName: string;
   /** Type of action to perform */
