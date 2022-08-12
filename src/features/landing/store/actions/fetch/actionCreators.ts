@@ -54,8 +54,8 @@ export const fetchSuccess = <T = any>(
 interface IFetchParams {
   /** Name of store to update */
   store: string;
-  /** Path to `IFetchable` property */
-  property: string;
+  /** Path to `IFetchable` property. If empty - perform on root */
+  property?: string;
   /** If `true` - clear current state */
   clearState?: boolean;
 }
