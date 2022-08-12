@@ -13,7 +13,7 @@ export const changeIsFetching = (
     ACTION_TYPE.CHANGE,
     templateProperty`${property}.${"isFetching"}`
   ),
-  payload: false,
+  payload: value,
 });
 
 /** Action creator for changing current state of `IFetchable` */
