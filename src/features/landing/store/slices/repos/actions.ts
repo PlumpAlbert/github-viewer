@@ -1,7 +1,7 @@
 import {ErrorType} from "api";
 import {RepoState, RepoType, STORE_NAME} from ".";
-import {Action, actionTypeCreator, ACTION_TYPE} from "../../actions";
-import * as fetchActionCreators from "../fetch/actionCreators";
+import {Action, actionTypeCreator, ACTION_TYPE} from "app/actions";
+import * as fetchActionCreators from "../fetch/sagas";
 
 /** Action creator for handling fetch request of repos */
 export const fetchRepos = () =>

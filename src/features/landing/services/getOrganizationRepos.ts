@@ -1,7 +1,7 @@
 import axios from "axios";
 import {z} from "zod";
 import {ErrorType, GITHUB_API_ENDPOINT} from "api";
-import {RepoSchema} from "../reposStore";
+import {RepoSchema} from "../store/slices/repos";
 
 export const getOrganizationRepos = async ({
   name,
