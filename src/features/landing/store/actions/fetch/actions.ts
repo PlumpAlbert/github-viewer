@@ -14,7 +14,10 @@ export const changeIsFetching = ({store, property}: IPathParam, value: boolean) 
 });
 
 /** Action creator for changing current state of `IFetchable` */
-export const changeValue = <V = any>({store, property}: IPathParam, value: V) => ({
+export const changeValue = <V = any>(
+  {store, property}: IPathParam,
+  value: IClearable<V>
+) => ({
   type: actionTypeCreator(
     store,
     ACTION_TYPE.CHANGE,
@@ -22,6 +25,13 @@ export const changeValue = <V = any>({store, property}: IPathParam, value: V) =>
   ),
   payload: value,
 });
+interface IClearable<T = any> {
+  /** If `true` - replace existing value with new one.
+   * Otherwise merge values together */
+  clear: boolean;
+  /** New value */
+  value?: T;
+}
 
 /** Action creator for setting current error state of `IFetchable` */
 export const setFetchError = <V = any>({store, property}: IPathParam, value: V) => ({
