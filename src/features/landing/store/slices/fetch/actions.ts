@@ -1,4 +1,4 @@
-import {actionTypeCreator, ACTION_TYPE} from "..";
+import {actionTypeCreator, ACTION_TYPE} from "app/actions";
 import {IFetchable} from ".";
 
 //#region Actions

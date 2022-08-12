@@ -1,5 +1,5 @@
 import {Reducer} from "@reduxjs/toolkit";
-import {ACTION_TYPE} from "..";
+import {ACTION_TYPE} from "app/actions";
 import * as actions from "./actions";
 
 export interface IFetchable<T, E = any> {

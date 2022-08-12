@@ -1,5 +1,5 @@
 import {Reducer} from "redux";
-import {Action, ACTION_TYPE} from "../../actions";
+import {Action, ACTION_TYPE} from "app/actions";
 import {z} from "zod";
 import fetchReducer, {IFetchable} from "../fetch";
 
