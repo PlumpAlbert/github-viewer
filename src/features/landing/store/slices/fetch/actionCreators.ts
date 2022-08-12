@@ -1,13 +1,13 @@
-import {ACTION_TYPE, Action, GroupedAction} from "..";
+import {ACTION_TYPE, Action, GroupedAction} from "../../actions";
 import {changeIsFetching, updateValue, setFetchError} from "./actions";
 
 /** Action creator for handling fetch requests */
-export const fetchRequest = ({
+export const fetchRequest = <R = any>({
   store,
   property,
   clearState,
-}: IFetchParams): GroupedAction => {
-  const path = joinPath(store, property || "");
+}: IFetchParams<R>): GroupedAction => {
+  const path = joinPath(store, property?.toString() || "");
   const actions: Action[] = [changeIsFetching(path, false)];
   if (clearState) {
     actions.push(updateValue(path, {clear: true}));
@@ -19,11 +19,11 @@ export const fetchRequest = ({
 };
 
 /** Action creator for handling fetch errors */
-export const fetchError = <T = any>(
-  {store, property, clearState}: IFetchParams,
+export const fetchError = <T = any, R = any>(
+  {store, property, clearState}: IFetchParams<R>,
   error: T
 ): GroupedAction => {
-  const path = joinPath(store, property || "");
+  const path = joinPath(store, property?.toString() || "");
   const actions: Action[] = [changeIsFetching(path, false)];
   if (clearState) {
     actions.push(updateValue(path, {clear: true}));
@@ -36,11 +36,11 @@ export const fetchError = <T = any>(
 };
 
 /** Action creator for handling fetch response */
-export const fetchSuccess = <T = any>(
-  {store, property, clearState}: IFetchParams,
+export const fetchSuccess = <T = any, R = any>(
+  {store, property, clearState}: IFetchParams<R>,
   value: T
 ): GroupedAction => {
-  const path = joinPath(store, property || "");
+  const path = joinPath(store, property?.toString() || "");
   const actions = [
     changeIsFetching(path, false),
     updateValue(path, {clear: !!clearState, value}),
@@ -51,11 +51,11 @@ export const fetchSuccess = <T = any>(
   };
 };
 
-interface IFetchParams {
+interface IFetchParams<StoreType = any> {
   /** Name of store to update */
   store: string;
   /** Path to `IFetchable` property. If empty - perform on root */
-  property?: string;
+  property?: keyof StoreType;
   /** If `true` - clear current state */
   clearState?: boolean;
 }
