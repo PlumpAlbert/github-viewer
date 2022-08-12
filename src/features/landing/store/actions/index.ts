@@ -1,3 +1,6 @@
+export * as fetchActionCreators from './fetch/actionCreators';
+
+
 /**
  * Helper for creating action types
  *
