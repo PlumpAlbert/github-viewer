@@ -4,7 +4,10 @@ import {IFetchable} from ".";
 //#region Actions
 
 /** Action creator for changing current state of `IFetchable` */
-export const changeIsFetching = ({store, property}: IPathParam, value: boolean) => ({
+export const changeIsFetching = (
+  {store, property}: IPathParam,
+  value: boolean
+) => ({
   type: actionTypeCreator(
     store,
     ACTION_TYPE.CHANGE,
@@ -34,7 +37,10 @@ interface IClearable<T = any> {
 }
 
 /** Action creator for setting current error state of `IFetchable` */
-export const setFetchError = <V = any>({store, property}: IPathParam, value: V) => ({
+export const setFetchError = <V = any>(
+  {store, property}: IPathParam,
+  value: V
+) => ({
   type: actionTypeCreator(
     store,
     ACTION_TYPE.CHANGE,
