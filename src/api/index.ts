@@ -10,5 +10,3 @@ export const ErrorSchema = z.object({
 });
 
 export type ErrorType = z.infer<typeof ErrorSchema>;
-
-export * as repos from "./repos";
