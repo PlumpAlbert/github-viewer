@@ -12,7 +12,7 @@ export * as fetchActionCreators from "./fetch/actionCreators";
  * @param [property] - path to property
  */
 export const actionTypeCreator = <R>(
-  store: keyof RootState,
+  store: string,
   action: ACTION_TYPE,
   property?: keyof R
 ): ActionType<R> => ({
@@ -34,7 +34,7 @@ export enum ACTION_TYPE {
  */
 type ActionType<RootType> = {
   /** Name of slice in `RootState` */
-  storeName: keyof RootState;
+  storeName: string;
   /** Type of action to perform */
   type: ACTION_TYPE;
   /** Path of property inside slice's state */
