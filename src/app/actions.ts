@@ -23,7 +23,7 @@ export const actionTypeCreator = <R>(
 
 export enum ACTION_TYPE {
   CHANGE = "change",
-  GROUPED = "grouped",
+  FETCH = "fetch",
 }
 
 /**
