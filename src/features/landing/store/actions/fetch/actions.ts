@@ -28,13 +28,6 @@ export const changeValue = <V = any>(
   ),
   payload: value,
 });
-interface IClearable<T = any> {
-  /** If `true` - replace existing value with new one.
-   * Otherwise merge values together */
-  clear: boolean;
-  /** New value */
-  value?: T;
-}
 
 /** Action creator for setting current error state of `IFetchable` */
 export const setFetchError = <V = any>(
@@ -58,6 +51,14 @@ interface IPathParam {
   store: string;
   /** path to `IFetchable` property. If empty - perform action on root */
   property?: string;
+}
+
+interface IClearable<T = any> {
+  /** If `true` - replace existing value with new one.
+   * Otherwise merge values together */
+  clear: boolean;
+  /** New value */
+  value?: T;
 }
 
 //#endregion
