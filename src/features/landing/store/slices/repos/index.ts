@@ -1,7 +1,7 @@
 import {Reducer} from "redux";
-import {Action, ActionType, ACTION_TYPE} from "../../actions";
+import {Action, ACTION_TYPE} from "../../actions";
 import {z} from "zod";
-import {IFetchable} from "../fetch";
+import fetchReducer, {IFetchable} from "../fetch";
 
 export const STORE_NAME = "repos";
 
@@ -22,13 +22,27 @@ const reducer: Reducer<RepoState, Action<any, RepoState>> = (
   action
 ) => {
   const {storeName, type, property} = action.type;
-  if (storeName !== STORE_NAME) return state;
+  // explode `storeName` to get full path of action root
+  const storeNames = storeName.split(".");
+  if (storeName[0] !== STORE_NAME) return state;
   switch (type) {
     case ACTION_TYPE.CHANGE: {
-      switch (property) {
-        case "name": {
-          return {...state, name: action.payload};
-        }
+      if (property === "name") {
+        return {...state, name: action.payload};
+      }
+      if (storeNames[1] === "repos") {
+        // pass action down to `fetchReducer`
+        // with updated `action.type.storeName` field
+        return {
+          ...state,
+          repos: fetchReducer(state.repos, {
+            ...action,
+            type: {
+              ...action.type,
+              storeName: storeNames.slice(1).join("."),
+            },
+          }),
+        };
       }
     }
   }
