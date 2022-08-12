@@ -1,4 +1,50 @@
+import {actionTypeCreator, ACTION_TYPE} from "..";
 import {IFetchable} from ".";
+
+//#region Actions
+
+/** Action creator for changing current state of `IFetchable` */
+export const changeIsFetching = ({store, property}: IPathParam, value: boolean) => ({
+  type: actionTypeCreator(
+    store,
+    ACTION_TYPE.CHANGE,
+    templateProperty`${property}.${"isFetching"}`
+  ),
+  payload: false,
+});
+
+/** Action creator for changing current state of `IFetchable` */
+export const changeValue = <V = any>({store, property}: IPathParam, value: V) => ({
+  type: actionTypeCreator(
+    store,
+    ACTION_TYPE.CHANGE,
+    templateProperty`${property}.${"isFetching"}`
+  ),
+  payload: value,
+});
+
+/** Action creator for setting current error state of `IFetchable` */
+export const setFetchError = <V = any>({store, property}: IPathParam, value: V) => ({
+  type: actionTypeCreator(
+    store,
+    ACTION_TYPE.CHANGE,
+    templateProperty`${property}.${"fetchError"}`
+  ),
+  payload: value,
+});
+
+//#endregion
+
+//#region Type definitions
+
+interface IPathParam {
+  /** name of store to update */
+  store: string;
+  /** path to `IFetchable` property. If empty - perform action on root */
+  property?: string;
+}
+
+//#endregion
 
 /**
  * Template function that simplifies property path creation for `IFetchable`
