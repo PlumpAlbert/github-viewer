@@ -8,7 +8,7 @@ export function* fetchRequestSaga<R = any>({
   clearState,
 }: IFetchParams<R>) {
   const path = joinPath(store, property?.toString() || "");
-  yield put(changeIsFetching(path, false));
+  yield put(changeIsFetching(path, true));
   if (clearState) {
     yield put(updateValue(path, {clear: true}));
   }
