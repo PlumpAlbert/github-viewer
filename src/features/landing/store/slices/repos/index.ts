@@ -39,6 +39,7 @@ const reducer: Reducer<RepoState, Action<any, RepoState>> = (
             ...action,
             type: {
               ...action.type,
+              property: action.type.property as keyof typeof state.repos,
               storeName: storeNames.slice(1).join("."),
             },
           }),
