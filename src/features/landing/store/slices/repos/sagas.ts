@@ -7,30 +7,37 @@ import * as fetchSagas from "../fetch/sagas";
 import * as actions from "./actions";
 import {STORE_NAME, RepoState, RepoType} from ".";
 
-/** Saga for handling fetch request of repos */
-export const reposFetchStart = () =>
+/**
+ * Saga for handling fetch request of repos
+ * @param {boolean} clear
+ * If `true` clear current state
+ */
+export const reposFetchStart = (clear: boolean = false) =>
   fetchSagas.fetchRequestSaga<RepoState>({
     store: STORE_NAME,
     property: "repos",
+    clearState: clear,
   });
 
 /**
  * Saga for handling response of repos fetch
  * @param repos - list of repos to append to store
+ * @param clear - If `true` clear current state
  */
-export const reposFetchSuccess = (repos: RepoType[]) =>
-  fetchSagas.fetchSuccessSaga<RepoType[], RepoState>(
-    {store: STORE_NAME, property: "repos"},
-    repos
+export const reposFetchSuccess = (repos: RepoType[], clear: boolean = false) =>
+  fetchSagas.fetchSuccessSaga<RepoType, RepoState>(
+    {store: STORE_NAME, property: "repos", clearState: clear},
+    repos.reduce((value, repo) => ({...value, [repo.id]: repo}), {})
   );
 
 /**
  * Saga for handling errors that occurred while fetching repos
  * @param error - error object to set
+ * @param clear - If `true` clear current state
  */
-export const reposFetchError = (error: ErrorType) =>
+export const reposFetchError = (error: ErrorType, clear: boolean = false) =>
   fetchSagas.fetchErrorSaga<ErrorType, RepoState>(
-    {store: STORE_NAME, property: "repos"},
+    {store: STORE_NAME, property: "repos", clearState: clear},
     error
   );
 
