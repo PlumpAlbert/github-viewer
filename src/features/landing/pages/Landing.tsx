@@ -24,7 +24,11 @@ const LandingPage: React.FC = () => {
       <h1 className="text-4xl text-blue-600 font-semibold uppercase dark:text-blue-400">
         Github Viewer
       </h1>
-      <form action="" className="w-full flex gap-4 items-start">
+      <form
+        action=""
+        className="w-full flex gap-4 items-start"
+        onSubmit={e => e.preventDefault()}
+      >
         <div className="flex flex-col flex-1 gap-2">
           <input
             id="search-field"
