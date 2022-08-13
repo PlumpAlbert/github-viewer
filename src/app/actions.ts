@@ -13,11 +13,29 @@ export const actionTypeCreator = <R>(
   store: string,
   action: ACTION_TYPE,
   property?: keyof R
-): ActionType<R> => ({
-  storeName: store,
-  type: action,
-  property,
-});
+): string => {
+  let result = `${store}-${action}`;
+  if (property) {
+    result += `-${property.toString()}`;
+  }
+  return result;
+};
+
+/**
+ * Helper that parses action's `type` property to retrieve store name,
+ * action type and property
+ *
+ * @param {string} type
+ * Value of action's `type` property
+ */
+export const parseActionType = <R>(type: string): ActionType<R> => {
+  const [store, action, property] = type.split("-");
+  return {
+    storeName: store,
+    type: action as ACTION_TYPE,
+    property: property as keyof R,
+  };
+};
 
 //#endregion
 
@@ -38,12 +56,7 @@ export type ActionType<RootType> = {
   /** Path of property inside slice's state */
   property?: keyof RootType;
 };
-/**
- * @template PayloadType - type of payload
- * @template RootType - type of root state
- * */
-export type Action<PayloadType = any, RootType = any> = ReduxAction<
-  ActionType<RootType>
-> & {
+/** @template PayloadType - type of payload */
+export type PayloadedAction<PayloadType = any> = ReduxAction<string> & {
   payload?: PayloadType;
 };

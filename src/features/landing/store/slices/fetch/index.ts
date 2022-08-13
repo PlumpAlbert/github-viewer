@@ -1,5 +1,5 @@
 import {Reducer} from "@reduxjs/toolkit";
-import {ACTION_TYPE} from "app/actions";
+import {ACTION_TYPE, parseActionType} from "app/actions";
 import * as actions from "./actions";
 
 export type FetchableValue<T> = {[key: string | number]: T};
@@ -22,7 +22,7 @@ const reducer: Reducer<IFetchable<any>, ActionTypes> = (
   state = initialState,
   action
 ) => {
-  const {type, property} = action.type;
+  const {type, property} = parseActionType<typeof state>(action.type);
   switch (type) {
     case ACTION_TYPE.CHANGE: {
       switch (property) {

@@ -1,5 +1,5 @@
-import {RepoState, STORE_NAME} from ".";
-import {Action, actionTypeCreator, ACTION_TYPE} from "app/actions";
+import {STORE_NAME} from ".";
+import {PayloadedAction, actionTypeCreator, ACTION_TYPE} from "app/actions";
 import {getOrganizationRepos} from "features/landing/services/getOrganizationRepos";
 
 /**
@@ -8,7 +8,7 @@ import {getOrganizationRepos} from "features/landing/services/getOrganizationRep
  */
 export const changeOrganizationName = (
   name: string
-): Action<string, RepoState> => ({
+): PayloadedAction<string> => ({
   type: actionTypeCreator(STORE_NAME, ACTION_TYPE.CHANGE, "name"),
   payload: name,
 });
@@ -18,7 +18,7 @@ export const changeOrganizationName = (
  */
 export const fetchRepos = (
   ...params: Parameters<typeof getOrganizationRepos>
-): Action<Parameters<typeof getOrganizationRepos>, RepoState> => ({
+): PayloadedAction<Parameters<typeof getOrganizationRepos>> => ({
   type: actionTypeCreator(STORE_NAME, ACTION_TYPE.FETCH, "repos"),
   payload: params,
 });

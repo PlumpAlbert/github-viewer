@@ -1,5 +1,10 @@
 import {Reducer} from "redux";
-import {Action, ACTION_TYPE} from "app/actions";
+import {
+  PayloadedAction,
+  ACTION_TYPE,
+  actionTypeCreator,
+  parseActionType,
+} from "app/actions";
 import {z} from "zod";
 import fetchReducer, {IFetchable} from "../fetch";
 
@@ -17,11 +22,13 @@ export type RepoState = {
   repos: IFetchable<RepoType>;
 };
 
-const reducer: Reducer<RepoState, Action<any, RepoState>> = (
+const reducer: Reducer<RepoState, PayloadedAction<any>> = (
   state = initialState,
   action
 ) => {
-  const {storeName, type, property} = action.type;
+  const {storeName, type, property} = parseActionType<typeof state>(
+    action.type
+  );
   if (!storeName) return state;
   // explode `storeName` to get full path of action root
   const storeNames = storeName.split(".");
@@ -34,15 +41,16 @@ const reducer: Reducer<RepoState, Action<any, RepoState>> = (
       if (storeNames[1] === "repos") {
         // pass action down to `fetchReducer`
         // with updated `action.type.storeName` field
+        const delegatedAction = actionTypeCreator<typeof state>(
+          storeNames.slice(1).join("."),
+          type,
+          property
+        );
         return {
           ...state,
           repos: fetchReducer(state.repos, {
             ...action,
-            type: {
-              ...action.type,
-              property: action.type.property as keyof typeof state.repos,
-              storeName: storeNames.slice(1).join("."),
-            },
+            type: delegatedAction,
           }),
         };
       }
