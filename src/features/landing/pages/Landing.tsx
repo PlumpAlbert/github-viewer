@@ -38,6 +38,7 @@ const LandingPage: React.FC = () => {
             aria-labelledby="search-field-label"
             type="text"
             placeholder="Enter organization name here..."
+            className={error && "error"}
             onChange={handleInputChange}
             value={organizationName}
           />
