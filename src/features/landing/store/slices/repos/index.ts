@@ -22,6 +22,7 @@ const reducer: Reducer<RepoState, Action<any, RepoState>> = (
   action
 ) => {
   const {storeName, type, property} = action.type;
+  if (!storeName) return state;
   // explode `storeName` to get full path of action root
   const storeNames = storeName.split(".");
   if (storeNames[0] !== STORE_NAME) return state;
