@@ -2,11 +2,14 @@ import {Reducer} from "@reduxjs/toolkit";
 import {ACTION_TYPE} from "app/actions";
 import * as actions from "./actions";
 
-export interface IFetchable<T, E = any> {
+export interface Identifiable {
+  id: number | string;
+}
+export interface IFetchable<T extends Identifiable, E = any> {
   /** If `true` object value is currently been fetched */
   isFetching: boolean;
   /** Object's state */
-  value?: T;
+  value?: {[key: Identifiable["id"]]: T};
   /** Fetch error state */
   fetchError?: E;
 }

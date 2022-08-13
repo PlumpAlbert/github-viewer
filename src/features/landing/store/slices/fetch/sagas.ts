@@ -1,4 +1,5 @@
 import {put} from "redux-saga/effects";
+import {Identifiable} from ".";
 import {changeIsFetching, updateValue, setFetchError} from "./actions";
 
 /** Action creator for handling fetch requests */
@@ -28,9 +29,9 @@ export function* fetchErrorSaga<T = any, R = any>(
 }
 
 /** Action creator for handling fetch response */
-export function* fetchSuccessSaga<T = any, R = any>(
+export function* fetchSuccessSaga<T extends Identifiable = any, R = any>(
   {store, property, clearState}: IFetchParams<R>,
-  value: T
+  value: {[key: Identifiable["id"]]: T}
 ) {
   const path = joinPath(store, property?.toString() || "");
   yield put(changeIsFetching(path, false));

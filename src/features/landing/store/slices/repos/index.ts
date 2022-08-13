@@ -14,7 +14,7 @@ export const initialState: RepoState = {
 
 export type RepoState = {
   name: string;
-  repos: IFetchable<RepoType[]>;
+  repos: IFetchable<RepoType>;
 };
 
 const reducer: Reducer<RepoState, Action<any, RepoState>> = (
