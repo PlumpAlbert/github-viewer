@@ -47,4 +47,3 @@ export type Action<PayloadType = any, RootType = any> = ReduxAction<
 > & {
   payload?: PayloadType;
 };
-export type GroupedAction = {type: ACTION_TYPE.GROUPED; payload: Action[]};
