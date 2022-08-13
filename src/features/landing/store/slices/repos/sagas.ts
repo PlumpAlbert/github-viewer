@@ -1,7 +1,10 @@
-import {call} from "@redux-saga/core/effects";
+import {call, take, fork, actionChannel} from "@redux-saga/core/effects";
+import {TakeableChannel} from "redux-saga";
+import {ACTION_TYPE} from "app/actions";
 import {getOrganizationRepos} from "../../../services/getOrganizationRepos";
 import {ErrorType} from "api";
 import * as fetchSagas from "../fetch/sagas";
+import * as actions from "./actions";
 import {STORE_NAME, RepoState, RepoType} from ".";
 
 /** Saga for handling fetch request of repos */
@@ -37,9 +40,7 @@ export const reposFetchError = (error: ErrorType) =>
  *  @param params
  *  filters used for fetching repos
  */
-export default function* getRepos(
-  ...params: Parameters<typeof getOrganizationRepos>
-) {
+export function* getRepos(...params: Parameters<typeof getOrganizationRepos>) {
   try {
     yield call(reposFetchStart);
     const repos: Awaited<ReturnType<typeof getOrganizationRepos>> = yield call(
@@ -49,5 +50,20 @@ export default function* getRepos(
     yield call(reposFetchSuccess, repos);
   } catch (error: any) {
     yield call(reposFetchError, error.message);
+  }
+}
+
+type FetchReposAction = ReturnType<typeof actions.fetchRepos>;
+export default function* () {
+  const fetchChannel: TakeableChannel<FetchReposAction> = yield actionChannel(
+    ({type}: FetchReposAction) =>
+      type.storeName === STORE_NAME &&
+      type.type === ACTION_TYPE.FETCH &&
+      type.property === "repos"
+  );
+  while (true) {
+    const {payload}: FetchReposAction = yield take(fetchChannel);
+    if (!payload) throw "Payload is not defined!";
+    yield fork(getRepos, ...payload);
   }
 }
