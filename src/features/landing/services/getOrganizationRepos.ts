@@ -19,6 +19,7 @@ export const getOrganizationRepos = async ({
     );
     return ResponseSchema.parse(response.data);
   } catch (response) {
+    // eslint-disable-next-line
     throw (response as AxiosError).response?.data as ErrorType;
   }
 };
