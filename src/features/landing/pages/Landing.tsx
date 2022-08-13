@@ -1,26 +1,38 @@
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 import {useAppDispatch, useAppSelector} from "app/hooks";
 
 import * as actions from "../store/slices/repos/actions";
 
 const LandingPage: React.FC = () => {
-  const [organizationName, setOrganizationName] = useState("");
-  const error = useAppSelector(state => state.organization.repos.fetchError);
+  const [inputValue, setInputValue] = useState("");
+  const {organizationName, error} = useAppSelector(state => ({
+    organizationName: state.organization.name,
+    error: state.organization.repos.fetchError,
+  }));
 
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (error && inputValue !== organizationName) {
+      dispatch(actions.clearError());
+    }
+  }, [inputValue]);
+
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =
-    useCallback(e => {
-      const value = e.currentTarget.value;
-      setOrganizationName(value);
-    }, []);
+    useCallback(
+      e => {
+        const value = e.currentTarget.value;
+        setInputValue(value);
+      },
+      [dispatch]
+    );
 
   const handleSearchClick: React.MouseEventHandler<HTMLButtonElement> =
     useCallback(() => {
-      dispatch(actions.changeOrganizationName(organizationName));
-      dispatch(actions.fetchRepos({name: organizationName}));
-    }, [dispatch, organizationName]);
+      dispatch(actions.changeOrganizationName(inputValue));
+      dispatch(actions.fetchRepos({name: inputValue}));
+    }, [dispatch, inputValue]);
 
   return (
     <main className="w-full h-full flex flex-col justify-center items-center gap-8 max-w-2xl m-auto">
@@ -40,7 +52,7 @@ const LandingPage: React.FC = () => {
             placeholder="Enter organization name here..."
             className={error && "error"}
             onChange={handleInputChange}
-            value={organizationName}
+            value={inputValue}
           />
           {error && (
             <p className="flex items-center gap-1 px-3 text-sm text-red-500 dark:text-red-400">
