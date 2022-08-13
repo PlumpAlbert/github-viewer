@@ -61,7 +61,7 @@ export function* getRepos(...params: Parameters<typeof getOrganizationRepos>) {
 }
 
 type FetchReposAction = ReturnType<typeof actions.fetchRepos>;
-export default function* () {
+export function* watchFetchRepos() {
   const fetchChannel: TakeableChannel<FetchReposAction> = yield actionChannel(
     ({type}: FetchReposAction) =>
       type.storeName === STORE_NAME &&
@@ -73,4 +73,8 @@ export default function* () {
     if (!payload) throw "Payload is not defined!";
     yield fork(getRepos, ...payload);
   }
+}
+
+export default function*() {
+  yield call(watchFetchRepos);
 }
