@@ -10,10 +10,6 @@ const LandingPage: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(actions.fetchRepos({name: "fa"}));
-  }, [dispatch]);
-
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =
     useCallback(
       e => {
