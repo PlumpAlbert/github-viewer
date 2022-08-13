@@ -1,4 +1,4 @@
-import axios, {AxiosResponse, AxiosError} from "axios";
+import axios, {AxiosError} from "axios";
 import {z} from "zod";
 import {ErrorType, GITHUB_API_ENDPOINT} from "api";
 import {RepoSchema} from "../store/slices/repos";
