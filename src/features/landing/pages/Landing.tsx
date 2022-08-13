@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 
 import {useAppDispatch, useAppSelector} from "app/hooks";
 
@@ -11,13 +11,10 @@ const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =
-    useCallback(
-      e => {
-        const value = e.currentTarget.value;
-        setOrganizationName(value);
-      },
-      [dispatch]
-    );
+    useCallback(e => {
+      const value = e.currentTarget.value;
+      setOrganizationName(value);
+    }, []);
 
   const handleSearchClick: React.MouseEventHandler<HTMLButtonElement> =
     useCallback(() => {
