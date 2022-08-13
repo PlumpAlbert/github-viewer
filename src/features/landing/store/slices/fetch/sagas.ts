@@ -1,4 +1,5 @@
 import {put} from "redux-saga/effects";
+import {joinPath} from "app/actions";
 import {changeIsFetching, updateValue, setFetchError} from "./actions";
 import {FetchableValue} from ".";
 
@@ -18,7 +19,7 @@ export function* fetchRequestSaga<R = any>({
 /** Action creator for handling fetch errors */
 export function* fetchErrorSaga<T = any, R = any>(
   {store, property, clearState}: IFetchParams<R>,
-  error: T
+  error?: T
 ) {
   const path = joinPath(store, property?.toString() || "");
   yield put(changeIsFetching(path, false));
@@ -45,13 +46,4 @@ interface IFetchParams<StoreType = any> {
   property?: keyof StoreType;
   /** If `true` - clear current state */
   clearState?: boolean;
-}
-
-/**
- * Helper function for combining list of properties into property path
- *
- * @param properties - path to property with type `IFetchable`
- */
-function joinPath(...properties: string[]): string {
-  return properties.join(".");
 }

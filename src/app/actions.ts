@@ -37,6 +37,15 @@ export const parseActionType = <R>(type: string): ActionType<R> => {
   };
 };
 
+/**
+ * Helper function for combining list of properties into property path
+ *
+ * @param properties - path to property with type `IFetchable`
+ */
+export function joinPath(...properties: string[]): string {
+  return properties.join(".");
+}
+
 //#endregion
 
 export enum ACTION_TYPE {
