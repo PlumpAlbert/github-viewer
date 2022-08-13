@@ -1,11 +1,11 @@
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 import {useAppDispatch, useAppSelector} from "app/hooks";
 
 import * as actions from "../store/slices/repos/actions";
 
 const LandingPage: React.FC = () => {
-  const organizationName = useAppSelector(state => state.organization.name);
+  const [organizationName, setOrganizationName] = useState("");
   const error = useAppSelector(state => state.organization.repos.fetchError);
 
   const dispatch = useAppDispatch();
@@ -14,7 +14,7 @@ const LandingPage: React.FC = () => {
     useCallback(
       e => {
         const value = e.currentTarget.value;
-        dispatch(actions.changeOrganizationName(value));
+        setOrganizationName(value);
       },
       [dispatch]
     );
