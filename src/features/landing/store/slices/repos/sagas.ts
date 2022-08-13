@@ -1,4 +1,4 @@
-import {call, takeEvery} from "@redux-saga/core/effects";
+import {call, takeEvery, take, all} from "@redux-saga/core/effects";
 import {getOrganizationRepos} from "../../../services/getOrganizationRepos";
 import {ErrorType} from "api";
 import * as fetchSagas from "../fetch/sagas";
@@ -33,7 +33,7 @@ export const reposFetchSuccess = (repos: RepoType[], clear: boolean = false) =>
  * @param error - error object to set
  * @param clear - If `true` clear current state
  */
-export const reposFetchError = (error: ErrorType, clear: boolean = false) =>
+export const reposFetchError = (error?: ErrorType, clear: boolean = false) =>
   fetchSagas.fetchErrorSaga<ErrorType, RepoState>(
     {store: STORE_NAME, property: "repos", clearState: clear},
     error
@@ -59,7 +59,25 @@ export function* getRepos(action: ReturnType<typeof actions["fetchRepos"]>) {
   }
 }
 
-export default function* watchFetchRepos() {
+/**
+ * Watch saga that will run `getRepos` on every `actions.fetchRepos` action
+ */
+export function* watchFetchRepos() {
   const fetchAction = actions.fetchRepos({name: ""});
   yield takeEvery(fetchAction.type, getRepos);
+}
+
+/**
+ * Watch saga that will run `reposFetchError` on every `actions.clearError` action
+ */
+export function* watchClearError() {
+  const {type} = actions.clearError();
+  while (true) {
+    yield take(type);
+    yield call(reposFetchError, undefined);
+  }
+}
+
+export default function* () {
+  yield all([watchClearError(), watchFetchRepos()]);
 }
