@@ -24,12 +24,12 @@ const LandingPage: React.FC = () => {
     );
 
   return (
-    <main className="w-full h-full flex flex-col justify-center items-center gap-8">
+    <main className="w-full h-full flex flex-col justify-center items-center gap-8 max-w-2xl m-auto">
       <h1 className="text-4xl text-blue-600 font-semibold uppercase dark:text-blue-400">
         Github Viewer
       </h1>
-      <form action="" className="flex flex-col gap-4 max-w-lg w-1/2">
-        <div className="flex flex-col gap-2">
+      <form action="" className="w-full flex gap-4 items-start">
+        <div className="flex flex-col flex-1 gap-2">
           <input
             id="search-field"
             aria-labelledby="search-field-label"
@@ -47,6 +47,10 @@ const LandingPage: React.FC = () => {
             </p>
           )}
         </div>
+        <button type="submit" className="icon-button">
+          <i className="material-symbols-rounded">search</i>
+          <span className="sr-only"> Search </span>
+        </button>
       </form>
     </main>
   );
