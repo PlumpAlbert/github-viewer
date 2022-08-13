@@ -50,6 +50,7 @@ export function joinPath(...properties: string[]): string {
 
 export enum ACTION_TYPE {
   CHANGE = "change",
+  CLEAR = "clear",
   FETCH = "fetch",
 }
 

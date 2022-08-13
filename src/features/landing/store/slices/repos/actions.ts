@@ -1,5 +1,10 @@
 import {STORE_NAME} from ".";
-import {PayloadedAction, actionTypeCreator, ACTION_TYPE} from "app/actions";
+import {
+  actionTypeCreator,
+  joinPath,
+  ACTION_TYPE,
+  PayloadedAction,
+} from "app/actions";
 import {getOrganizationRepos} from "features/landing/services/getOrganizationRepos";
 
 /**
@@ -21,4 +26,15 @@ export const fetchRepos = (
 ): PayloadedAction<Parameters<typeof getOrganizationRepos>> => ({
   type: actionTypeCreator(STORE_NAME, ACTION_TYPE.FETCH, "repos"),
   payload: params,
+});
+
+/**
+ * Action creator for clearing fetch error
+ */
+export const clearError = (): PayloadedAction => ({
+  type: actionTypeCreator(
+    joinPath(STORE_NAME, "repos"),
+    ACTION_TYPE.CLEAR,
+    "fetchError"
+  ),
 });
