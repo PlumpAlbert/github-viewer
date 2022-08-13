@@ -24,7 +24,7 @@ const reducer: Reducer<RepoState, Action<any, RepoState>> = (
   const {storeName, type, property} = action.type;
   // explode `storeName` to get full path of action root
   const storeNames = storeName.split(".");
-  if (storeName[0] !== STORE_NAME) return state;
+  if (storeNames[0] !== STORE_NAME) return state;
   switch (type) {
     case ACTION_TYPE.CHANGE: {
       if (property === "name") {
