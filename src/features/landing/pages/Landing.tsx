@@ -19,6 +19,12 @@ const LandingPage: React.FC = () => {
       [dispatch]
     );
 
+  const handleSearchClick: React.MouseEventHandler<HTMLButtonElement> =
+    useCallback(() => {
+      dispatch(actions.changeOrganizationName(organizationName));
+      dispatch(actions.fetchRepos({name: organizationName}));
+    }, [dispatch, organizationName]);
+
   return (
     <main className="w-full h-full flex flex-col justify-center items-center gap-8 max-w-2xl m-auto">
       <h1 className="text-4xl text-blue-600 font-semibold uppercase dark:text-blue-400">
@@ -47,7 +53,11 @@ const LandingPage: React.FC = () => {
             </p>
           )}
         </div>
-        <button type="submit" className="icon-button">
+        <button
+          type="submit"
+          className="icon-button"
+          onClick={handleSearchClick}
+        >
           <i className="material-symbols-rounded">search</i>
           <span className="sr-only"> Search </span>
         </button>
