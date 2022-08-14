@@ -80,11 +80,11 @@ const SearchResults: React.FC = () => {
           </h2>
         </main>
       ) : (
-        <main className="flex flex-col flex-1 py-4 overflow-hidden">
+        <main className="flex flex-col flex-1 overflow-hidden">
           <h2
             className={`${
               elevate ? "shadow-lg shadow-gray-200 dark:shadow-gray-800 " : ""
-            }text-2xl text-center px-4 pt-2 pb-4 border-b uppercase`}
+            }text-2xl text-center px-4 p-4 border-b uppercase`}
           >
             <span className="text-blue-600 dark:text-blue-300">
               {organizationName}
@@ -96,6 +96,20 @@ const SearchResults: React.FC = () => {
           >
             <Table className="w-full h-full" data={repoState.value} />
           </div>
+          <footer className="flex gap-6 px-4 pb-6 pt-4 bg-gray-100 dark:bg-gray-800">
+            <button className="flex-1 outlined">
+              <span className="material-symbols-rounded icon">
+                navigate_before
+              </span>
+              <span className="hidden sm:inline">Previous page</span>
+            </button>
+            <button className="flex-1 outlined">
+              <span className="hidden sm:inline">Next page</span>
+              <span className="material-symbols-rounded icon">
+                navigate_next
+              </span>
+            </button>
+          </footer>
         </main>
       )}
     </div>
