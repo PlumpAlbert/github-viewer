@@ -8,7 +8,7 @@ import {
 } from "features/landing/store/slices/repos/actions";
 
 import Table from "../components/Table";
-import {useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 const SearchResults: React.FC = () => {
   const {repoState, organizationName} = useAppSelector(state => ({
@@ -26,6 +26,16 @@ const SearchResults: React.FC = () => {
       dispatch(fetchRepos({clear: true, params: {name}}));
     }
   }, []);
+
+  const [elevate, setElevate] = useState(false);
+  const handleTableScroll: React.UIEventHandler<HTMLDivElement> = useCallback(
+    e => {
+      const {scrollTop} = e.target as HTMLDivElement;
+      const newValue = scrollTop > 0;
+      if (newValue !== elevate) setElevate(newValue);
+    },
+    [elevate]
+  );
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -70,11 +80,22 @@ const SearchResults: React.FC = () => {
           </h2>
         </main>
       ) : (
-        <main className="flex flex-col flex-1 gap-2 py-4 overflow-hidden">
-          <h2 className="text-2xl text-center px-4 uppercase">
-            {organizationName}
+        <main className="flex flex-col flex-1 py-4 overflow-hidden">
+          <h2
+            className={`${
+              elevate ? "shadow-lg shadow-gray-200 dark:shadow-gray-800 " : ""
+            }text-2xl text-center px-4 pt-2 pb-4 border-b uppercase`}
+          >
+            <span className="text-blue-600 dark:text-blue-300">
+              {organizationName}
+            </span>
           </h2>
-          <Table data={repoState.value} />
+          <div
+            className="flex flex-1 overflow-auto scroll-smooth"
+            onScroll={handleTableScroll}
+          >
+            <Table className="w-full h-full" data={repoState.value} />
+          </div>
         </main>
       )}
     </div>
