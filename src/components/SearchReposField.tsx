@@ -1,6 +1,7 @@
-import {useCallback, useState, useEffect} from "react";
+import {useCallback, useState, useEffect, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 
+import {REPOS_PER_PAGE} from "const";
 import {useAppSelector, useAppDispatch} from "app/hooks";
 import * as actions from "features/landing/store/slices/repos/actions";
 import Spinner from "./Spinner";
@@ -22,11 +23,24 @@ const SearchReposField: React.FC<SearchReposFieldProps> = ({value = ""}) => {
     }
   }, [inputValue]);
 
+  const afterSubmit = useRef(false);
+  useEffect(() => {
+    if (afterSubmit.current && !error && !isFetching) {
+      navigate({pathname: "/search", search: "organization=" + inputValue});
+    }
+  }, [error, isFetching]);
+
   const handleFormSubmit: React.FormEventHandler = useCallback(
     e => {
       e.preventDefault();
       dispatch(actions.changeOrganizationName(inputValue));
-      navigate({pathname: "/search", search: "organization=" + inputValue});
+      dispatch(
+        actions.fetchRepos({
+          clear: true,
+          params: {name: inputValue, page: 1, per_page: REPOS_PER_PAGE},
+        })
+      );
+      afterSubmit.current = true;
     },
     [dispatch, inputValue, navigate]
   );
