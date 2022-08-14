@@ -71,9 +71,9 @@ export const RepoSchema = z.object({
   /** URL of repository */
   html_url: z.string(),
   /** Repository description */
-  description: z.string(),
+  description: z.string().nullable(),
   /** Main language of the repository */
-  language: z.string().nullable(),
+  language: z.string().nullable().nullable(),
   /** Total number of stars for this repository */
   stargazers_count: z.number(),
 });
