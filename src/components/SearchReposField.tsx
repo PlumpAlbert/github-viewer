@@ -24,7 +24,6 @@ const SearchReposField: React.FC<SearchReposFieldProps> = ({value = ""}) => {
     e => {
       e.preventDefault();
       dispatch(actions.changeOrganizationName(inputValue));
-      dispatch(actions.fetchRepos({clear: true, params: {name: inputValue}}));
       navigate({pathname: "/search", search: "organization=" + inputValue});
     },
     [dispatch, inputValue, navigate]
