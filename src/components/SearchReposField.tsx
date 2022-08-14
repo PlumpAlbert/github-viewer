@@ -1,4 +1,5 @@
 import {useCallback, useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 
 import {useAppSelector, useAppDispatch} from "app/hooks";
 import * as actions from "features/landing/store/slices/repos/actions";
@@ -11,6 +12,7 @@ const SearchReposField: React.FC<SearchReposFieldProps> = ({value = ""}) => {
   const [inputValue, setInputValue] = useState(value || organizationName);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (error && inputValue !== organizationName) {
@@ -22,7 +24,8 @@ const SearchReposField: React.FC<SearchReposFieldProps> = ({value = ""}) => {
     e => {
       e.preventDefault();
       dispatch(actions.changeOrganizationName(inputValue));
-      dispatch(actions.fetchRepos({name: inputValue}));
+      dispatch(actions.fetchRepos({clear: true, params: {name: inputValue}}));
+      navigate({pathname: "/search", search: "organization=" + inputValue});
     },
     [dispatch, inputValue]
   );
