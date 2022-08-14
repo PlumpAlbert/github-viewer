@@ -8,10 +8,9 @@ import styles from "./Table.module.css";
 const Table: React.FC<TableProps> = ({className, data}) => {
   const rows = useMemo(() => {
     if (!data) return null;
-    return data.map((repo, index) => (
+    return data.map(repo => (
       <TableRow
         key={repo.id}
-        index={index + 1}
         classes={{root: styles["row"], cell: styles["cell"]}}
         {...repo}
       />
@@ -22,7 +21,6 @@ const Table: React.FC<TableProps> = ({className, data}) => {
     <table className={className}>
       <thead>
         <tr className={styles["row"]}>
-          <th className={`${styles["cell"]} font-medium`}>#</th>
           <th className={`${styles["cell"]} font-medium`}>Name</th>
           <th className={`${styles["cell"]} font-medium`}>Description</th>
           <th className={`${styles["cell"]} font-medium`}>Language</th>
