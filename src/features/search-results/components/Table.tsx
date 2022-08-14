@@ -1,22 +1,21 @@
 import {useMemo} from "react";
 
-import {RepoType} from "features/landing/store/slices/repos";
-
 import TableRow from "./TableRow";
+import {RepoState} from "features/landing/store/slices/repos";
 
 import styles from "./Table.module.css";
 
-const Table: React.FC<TableProps> = props => {
-  const rows = useMemo(
-    () =>
-      props.data.map(repo => (
-        <TableRow
-          classes={{root: styles["row"], cell: styles["cell"]}}
-          {...repo}
-        />
-      )),
-    [props.data]
-  );
+const Table: React.FC<TableProps> = ({data}) => {
+  const rows = useMemo(() => {
+    if (!data) return null;
+    return Object.keys(data).map(id => (
+      <TableRow
+        classes={{root: styles["row"], cell: styles["cell"]}}
+        {...data[id]}
+      />
+    ));
+  }, [data]);
+
   return (
     <table>
       <thead>
@@ -35,5 +34,5 @@ const Table: React.FC<TableProps> = props => {
 export default Table;
 
 type TableProps = {
-  data: RepoType[];
+  data: RepoState["repos"]["value"];
 };
