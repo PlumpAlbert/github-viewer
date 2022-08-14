@@ -23,7 +23,7 @@ const Table: React.FC<TableProps> = ({data}) => {
           <th className={`${styles["cell"]} font-medium`}>Name</th>
           <th className={`${styles["cell"]} font-medium`}>Description</th>
           <th className={`${styles["cell"]} font-medium`}>Language</th>
-          <th className={`${styles["cell"]} font-medium`}>Stars</th>
+          <th className={`${styles["cell"]} font-medium text-right`}>Stars</th>
         </tr>
       </thead>
       <tbody>{rows}</tbody>

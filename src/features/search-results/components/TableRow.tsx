@@ -21,7 +21,7 @@ const TableRow: React.FC<RepoType & TableRowProps> = props => {
       </td>
       <td className={props.classes?.cell}>{props.description}</td>
       <td className={props.classes?.cell}>{props.language}</td>
-      <td className={props.classes?.cell}>{props.stargazers_count}</td>
+      <td className={`${props.classes?.cell} text-right`}>{props.stargazers_count}</td>
     </tr>
   );
 };
