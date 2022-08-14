@@ -55,7 +55,7 @@ export function* getRepos(action: ReturnType<typeof actions["fetchRepos"]>) {
     );
     yield call(reposFetchSuccess, repos);
   } catch (error: any) {
-    yield call(reposFetchError, error.message);
+    yield call(reposFetchError, error.message, true);
   }
 }
 
