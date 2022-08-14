@@ -38,7 +38,9 @@ const SearchResults: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (organizationName) {
+    const keys = Object.keys(repoState.value || {});
+    // if organizationName is set and this page wasn't previously fetched
+    if (organizationName && keys.length < page * REPOS_PER_PAGE) {
       dispatch(
         fetchRepos({
           clear: false,
@@ -46,8 +48,6 @@ const SearchResults: React.FC = () => {
         })
       );
     }
-    params.set("page", page.toString());
-    navigate({pathname: location.pathname, search: params.toString()});
   }, [page]);
 
   const [elevate, setElevate] = useState(false);
