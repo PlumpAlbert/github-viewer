@@ -24,33 +24,7 @@ const SearchResults: React.FC = () => {
   const location = useLocation();
   const [params] = useSearchParams();
 
-  const [page, setPage] = useState(() => {
-    const value = params.get("page");
-    if (!value) return 1;
-    const newValue = Number.parseInt(value) || 1;
-    return newValue < 1 ? 1 : newValue;
-  });
-
-  const handlePageChange: React.MouseEventHandler<HTMLButtonElement> =
-    useCallback(e => {
-      switch (e.currentTarget.name) {
-        case "prev": {
-          setPage(oldValue => {
-            const newValue = oldValue - 1;
-            if (newValue < 1) return 1;
-            return newValue;
-          });
-          break;
-        }
-        case "next": {
-          setPage(oldValue => {
-            const newValue = oldValue + 1;
-            return newValue;
-          });
-          break;
-        }
-      }
-    }, []);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const name = params.get("organization");
@@ -87,6 +61,30 @@ const SearchResults: React.FC = () => {
     },
     [elevate]
   );
+
+  const handlePageChange: React.MouseEventHandler<HTMLButtonElement> =
+    useCallback(e => {
+      switch (e.currentTarget.name) {
+        case "prev": {
+          setPage(oldValue => {
+            const newValue = oldValue - 1;
+            if (newValue < 1) return 1;
+            return newValue;
+          });
+          break;
+        }
+        case "next": {
+          setPage(oldValue => {
+            const newValue = oldValue + 1;
+            return newValue;
+          });
+          break;
+        }
+        default:
+          return;
+      }
+      setElevate(false);
+    }, []);
 
   return (
     <div className="flex flex-col w-full h-full">
