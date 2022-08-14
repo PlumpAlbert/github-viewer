@@ -162,6 +162,9 @@ const SearchResults: React.FC = () => {
               </span>
               <span className="hidden sm:inline">Previous page</span>
             </button>
+            <span className="text-base text-blue-600 dark:text-blue-400">
+              {page}
+            </span>
             <button
               className="flex-1 outlined"
               name="next"
