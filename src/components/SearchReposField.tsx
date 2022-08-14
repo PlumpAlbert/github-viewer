@@ -27,7 +27,7 @@ const SearchReposField: React.FC<SearchReposFieldProps> = ({value = ""}) => {
       dispatch(actions.fetchRepos({clear: true, params: {name: inputValue}}));
       navigate({pathname: "/search", search: "organization=" + inputValue});
     },
-    [dispatch, inputValue]
+    [dispatch, inputValue, navigate]
   );
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =

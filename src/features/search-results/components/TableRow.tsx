@@ -7,7 +7,7 @@ const TableRow: React.FC<RepoType & TableRowProps> = props => {
     if (props.className) result += " " + props.className;
     if (props.classes?.root) result += " " + props.classes.root;
     return result.trim();
-  }, [props.classes, props.classes?.root]);
+  }, [props.className, props.classes?.root]);
 
   return (
     <tr className={className}>

@@ -21,7 +21,7 @@ const Table: React.FC<TableProps> = ({className, data, rowsCount, page}) => {
           {...data[id]}
         />
       ));
-  }, [data]);
+  }, [data, page, rowsCount]);
 
   return (
     <table className={className}>
