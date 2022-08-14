@@ -36,6 +36,7 @@ export function* fetchSuccessSaga<T = any, R = any>(
 ) {
   const path = joinPath(store, property?.toString() || "");
   yield put(changeIsFetching(path, false));
+  yield put(setFetchError(path, undefined));
   yield put(updateValue(path, {clear: !!clearState, value}));
 }
 
