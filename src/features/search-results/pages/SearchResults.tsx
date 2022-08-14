@@ -1,16 +1,31 @@
 import {useSearchParams} from "react-router-dom";
 
-import {useAppSelector} from "app/hooks";
+import {useAppDispatch, useAppSelector} from "app/hooks";
 import SearchReposField from "components/SearchReposField";
+import {
+  changeOrganizationName,
+  fetchRepos,
+} from "features/landing/store/slices/repos/actions";
 
 import Table from "../components/Table";
+import {useEffect} from "react";
 
 const SearchResults: React.FC = () => {
   const {repoState, organizationName} = useAppSelector(state => ({
     repoState: state.organization.repos,
     organizationName: state.organization.name,
   }));
+  const dispatch = useAppDispatch();
+
   const [params] = useSearchParams();
+
+  useEffect(() => {
+    const name = params.get("organization");
+    if (name && organizationName !== name) {
+      dispatch(changeOrganizationName(name));
+      dispatch(fetchRepos({clear: true, params: {name}}));
+    }
+  }, []);
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -55,7 +70,7 @@ const SearchResults: React.FC = () => {
           </h2>
         </main>
       ) : (
-        <main className="flex flex-col flex-1 gap-2 py-4">
+        <main className="flex flex-col flex-1 gap-2 py-4 overflow-hidden">
           <h2 className="text-2xl text-center px-4 uppercase">
             {organizationName}
           </h2>
