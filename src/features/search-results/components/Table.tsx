@@ -5,15 +5,22 @@ import {RepoState} from "features/landing/store/slices/repos";
 
 import styles from "./Table.module.css";
 
-const Table: React.FC<TableProps> = ({className, data}) => {
+const Table: React.FC<TableProps> = ({className, data, rowsCount, page}) => {
   const rows = useMemo(() => {
     if (!data) return null;
-    return Object.keys(data).map(id => (
-      <TableRow
-        classes={{root: styles["row"], cell: styles["cell"]}}
-        {...data[id]}
-      />
-    ));
+    const repoIds = Object.keys(data);
+    const totalPages = Math.ceil(repoIds.length / rowsCount);
+    const startIndex = (page - 1) * rowsCount;
+    const endIndex = repoIds.length - (totalPages - page) * rowsCount;
+    return repoIds
+      .slice(startIndex, endIndex)
+      .map(id => (
+        <TableRow
+          key={id}
+          classes={{root: styles["row"], cell: styles["cell"]}}
+          {...data[id]}
+        />
+      ));
   }, [data]);
 
   return (
@@ -36,4 +43,6 @@ export default Table;
 type TableProps = {
   className?: string;
   data: RepoState["repos"]["value"];
+  rowsCount: number;
+  page: number;
 };

@@ -1,4 +1,4 @@
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams, useLocation} from "react-router-dom";
 
 import {useAppDispatch, useAppSelector} from "app/hooks";
 import SearchReposField from "components/SearchReposField";
@@ -10,6 +10,9 @@ import {
 import Table from "../components/Table";
 import {useCallback, useEffect, useState} from "react";
 
+/** The number of repositories to show per page */
+const REPOS_PER_PAGE = 20;
+
 const SearchResults: React.FC = () => {
   const {repoState, organizationName} = useAppSelector(state => ({
     repoState: state.organization.repos,
@@ -17,15 +20,63 @@ const SearchResults: React.FC = () => {
   }));
   const dispatch = useAppDispatch();
 
+  const navigate = useNavigate();
+  const location = useLocation();
   const [params] = useSearchParams();
+
+  const [page, setPage] = useState(() => {
+    const value = params.get("page");
+    if (!value) return 1;
+    const newValue = Number.parseInt(value) || 1;
+    return newValue < 1 ? 1 : newValue;
+  });
+
+  const handlePageChange: React.MouseEventHandler<HTMLButtonElement> =
+    useCallback(e => {
+      switch (e.currentTarget.name) {
+        case "prev": {
+          setPage(oldValue => {
+            const newValue = oldValue - 1;
+            if (newValue < 1) return 1;
+            return newValue;
+          });
+          break;
+        }
+        case "next": {
+          setPage(oldValue => {
+            const newValue = oldValue + 1;
+            return newValue;
+          });
+          break;
+        }
+      }
+    }, []);
 
   useEffect(() => {
     const name = params.get("organization");
     if (name && organizationName !== name) {
       dispatch(changeOrganizationName(name));
-      dispatch(fetchRepos({clear: true, params: {name}}));
+      dispatch(
+        fetchRepos({
+          clear: true,
+          params: {name, per_page: REPOS_PER_PAGE, page},
+        })
+      );
     }
   }, []);
+
+  useEffect(() => {
+    if (organizationName) {
+      dispatch(
+        fetchRepos({
+          clear: false,
+          params: {name: organizationName, page, per_page: REPOS_PER_PAGE},
+        })
+      );
+    }
+    params.set("page", page.toString());
+    navigate({pathname: location.pathname, search: params.toString()});
+  }, [page]);
 
   const [elevate, setElevate] = useState(false);
   const handleTableScroll: React.UIEventHandler<HTMLDivElement> = useCallback(
@@ -94,16 +145,29 @@ const SearchResults: React.FC = () => {
             className="flex flex-1 overflow-auto scroll-smooth"
             onScroll={handleTableScroll}
           >
-            <Table className="w-full h-full" data={repoState.value} />
+            <Table
+              className="w-full h-full"
+              data={repoState.value}
+              page={page}
+              rowsCount={REPOS_PER_PAGE}
+            />
           </div>
           <footer className="flex gap-6 px-4 pb-6 pt-4 bg-gray-100 dark:bg-gray-800">
-            <button className="flex-1 outlined">
+            <button
+              className="flex-1 outlined"
+              name="prev"
+              onClick={handlePageChange}
+            >
               <span className="material-symbols-rounded icon">
                 navigate_before
               </span>
               <span className="hidden sm:inline">Previous page</span>
             </button>
-            <button className="flex-1 outlined">
+            <button
+              className="flex-1 outlined"
+              name="next"
+              onClick={handlePageChange}
+            >
               <span className="hidden sm:inline">Next page</span>
               <span className="material-symbols-rounded icon">
                 navigate_next
