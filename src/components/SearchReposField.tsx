@@ -3,10 +3,12 @@ import {useNavigate} from "react-router-dom";
 
 import {useAppSelector, useAppDispatch} from "app/hooks";
 import * as actions from "features/landing/store/slices/repos/actions";
+import Spinner from "./Spinner";
 
 const SearchReposField: React.FC<SearchReposFieldProps> = ({value = ""}) => {
-  const {organizationName, error} = useAppSelector(state => ({
+  const {organizationName, isFetching, error} = useAppSelector(state => ({
     organizationName: state.organization.name,
+    isFetching: state.organization.repos.isFetching,
     error: state.organization.repos.fetchError,
   }));
   const [inputValue, setInputValue] = useState(value || organizationName);
@@ -61,7 +63,11 @@ const SearchReposField: React.FC<SearchReposFieldProps> = ({value = ""}) => {
         )}
       </div>
       <button type="submit" className="icon-button">
-        <i className="material-symbols-rounded">search</i>
+        {isFetching ? (
+          <Spinner />
+        ) : (
+          <i className="material-symbols-rounded">search</i>
+        )}
         <span className="sr-only"> Search </span>
       </button>
     </form>
