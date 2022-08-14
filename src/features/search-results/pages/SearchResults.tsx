@@ -1,4 +1,4 @@
-import {useNavigate, useSearchParams, useLocation} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 
 import {useAppDispatch, useAppSelector} from "app/hooks";
 import SearchReposField from "components/SearchReposField";
@@ -8,7 +8,7 @@ import {
 } from "features/landing/store/slices/repos/actions";
 
 import Table from "../components/Table";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 
 /** The number of repositories to show per page */
 const REPOS_PER_PAGE = 20;
@@ -20,8 +20,6 @@ const SearchResults: React.FC = () => {
   }));
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
-  const location = useLocation();
   const [params] = useSearchParams();
 
   const [page, setPage] = useState(1);
@@ -86,6 +84,14 @@ const SearchResults: React.FC = () => {
       setElevate(false);
     }, []);
 
+  const tableData = useMemo(() => {
+    if (!repoState.value) return [];
+    const repos = Object.values(repoState.value);
+    const startIndex = (page - 1) * REPOS_PER_PAGE;
+    const endIndex = startIndex + REPOS_PER_PAGE;
+    return repos.slice(startIndex, endIndex);
+  }, [repoState.value, page]);
+
   return (
     <div className="flex flex-col w-full h-full">
       <header className="flex gap-4 p-4 items-top bg-gray-100 dark:bg-gray-800">
@@ -143,14 +149,9 @@ const SearchResults: React.FC = () => {
             className="flex flex-1 overflow-auto scroll-smooth"
             onScroll={handleTableScroll}
           >
-            <Table
-              className="w-full h-full"
-              data={repoState.value}
-              page={page}
-              rowsCount={REPOS_PER_PAGE}
-            />
+            <Table className="w-full h-full" data={tableData} />
           </div>
-          <footer className="flex gap-6 px-4 pb-6 pt-4 bg-gray-100 dark:bg-gray-800">
+          <footer className="flex gap-6 items-center px-4 pb-6 pt-4 bg-gray-100 dark:bg-gray-800">
             <button
               className="flex-1 outlined"
               name="prev"
