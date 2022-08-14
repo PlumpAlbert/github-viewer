@@ -18,14 +18,18 @@ export const changeOrganizationName = (
   payload: name,
 });
 
+type FetchReposPayload = {
+  params: Parameters<typeof getOrganizationRepos>[0];
+  clear: boolean;
+};
 /**
  * Action creator for fetching repositories
  */
 export const fetchRepos = (
-  ...params: Parameters<typeof getOrganizationRepos>
-): PayloadedAction<Parameters<typeof getOrganizationRepos>> => ({
+  payload: FetchReposPayload
+): PayloadedAction<FetchReposPayload> => ({
   type: actionTypeCreator(STORE_NAME, ACTION_TYPE.FETCH, "repos"),
-  payload: params,
+  payload,
 });
 
 /**

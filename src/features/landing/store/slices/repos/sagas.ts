@@ -51,9 +51,9 @@ export function* getRepos(action: ReturnType<typeof actions["fetchRepos"]>) {
     yield call(reposFetchStart);
     const repos: Awaited<ReturnType<typeof getOrganizationRepos>> = yield call(
       getOrganizationRepos,
-      ...action.payload
+      action.payload.params
     );
-    yield call(reposFetchSuccess, repos);
+    yield call(reposFetchSuccess, repos, action.payload.clear);
   } catch (error: any) {
     yield call(reposFetchError, error.message, true);
   }
@@ -63,7 +63,7 @@ export function* getRepos(action: ReturnType<typeof actions["fetchRepos"]>) {
  * Watch saga that will run `getRepos` on every `actions.fetchRepos` action
  */
 export function* watchFetchRepos() {
-  const fetchAction = actions.fetchRepos({name: ""});
+  const fetchAction = actions.fetchRepos({clear: false, params: {name: ""}});
   yield takeEvery(fetchAction.type, getRepos);
 }
 
