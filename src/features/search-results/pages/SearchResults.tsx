@@ -1,3 +1,4 @@
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 
 import {useAppDispatch, useAppSelector} from "app/hooks";
@@ -8,7 +9,6 @@ import {
 } from "features/landing/store/slices/repos/actions";
 
 import Table from "../components/Table";
-import {useCallback, useEffect, useMemo, useState} from "react";
 
 /** The number of repositories to show per page */
 const REPOS_PER_PAGE = 20;
@@ -23,6 +23,7 @@ const SearchResults: React.FC = () => {
   const [params] = useSearchParams();
 
   const [page, setPage] = useState(1);
+  const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const name = params.get("organization");
@@ -47,6 +48,8 @@ const SearchResults: React.FC = () => {
           params: {name: organizationName, page, per_page: REPOS_PER_PAGE},
         })
       );
+      tableWrapperRef.current?.scrollTo({top: 0, left: 0, behavior: "auto"});
+      setElevate(false);
     }
   }, [page]);
 
@@ -81,7 +84,6 @@ const SearchResults: React.FC = () => {
         default:
           return;
       }
-      setElevate(false);
     }, []);
 
   const tableData = useMemo(() => {
@@ -147,6 +149,7 @@ const SearchResults: React.FC = () => {
           </h2>
           <div
             className="flex flex-1 overflow-auto scroll-smooth"
+            ref={tableWrapperRef}
             onScroll={handleTableScroll}
           >
             <Table className="w-full h-full" data={tableData} />
