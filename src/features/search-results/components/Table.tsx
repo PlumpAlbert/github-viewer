@@ -5,7 +5,7 @@ import {RepoState} from "features/landing/store/slices/repos";
 
 import styles from "./Table.module.css";
 
-const Table: React.FC<TableProps> = ({data}) => {
+const Table: React.FC<TableProps> = ({className, data}) => {
   const rows = useMemo(() => {
     if (!data) return null;
     return Object.keys(data).map(id => (
@@ -17,7 +17,7 @@ const Table: React.FC<TableProps> = ({data}) => {
   }, [data]);
 
   return (
-    <table>
+    <table className={className}>
       <thead>
         <tr className={styles["row"]}>
           <th className={`${styles["cell"]} font-medium`}>Name</th>
@@ -34,5 +34,6 @@ const Table: React.FC<TableProps> = ({data}) => {
 export default Table;
 
 type TableProps = {
+  className?: string;
   data: RepoState["repos"]["value"];
 };
