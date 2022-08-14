@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 
+import {REPOS_PER_PAGE} from "const";
 import {useAppDispatch, useAppSelector} from "app/hooks";
 import SearchReposField from "components/SearchReposField";
 import {
@@ -10,8 +11,6 @@ import {
 
 import Table from "../components/Table";
 import Spinner from "components/Spinner";
-/** The number of repositories to show per page */
-const REPOS_PER_PAGE = 20;
 
 const SearchResults: React.FC = () => {
   const {repoState, organizationName} = useAppSelector(state => ({
